@@ -59,10 +59,11 @@ uint64_t disk_time_io(const int fd)
  * @param n times to show utilization (n<0 show infinite times)
  * @param interval measure interval
  * @param prefix output prefix (NULL if none)
+ * @param prefix output suffix (NULL if none)
  * @param flags output flags
   */
 int output_loop(const int fd, int n, const struct timespec *interval,
-                const char *prefix, const int flags)
+                const char *prefix, const char *suffix, const int flags)
 {
         uint64_t io_then, io_now;
         float utilization;
@@ -95,16 +96,19 @@ int output_loop(const int fd, int n, const struct timespec *interval,
 
                 /* output */
                 if(prefix)
-                        fputs(prefix, stdout); // Avoid '\n' of puts
+                        printf("%s", prefix); // Avoid '\n' of puts
                 if( IS_HUMAN_READABLE(flags) ) {
                         utilization *= 100.0;
                         if( IS_SHOW_FRACTION(flags) )
-                                printf("%.2f%%\n", utilization);
+                                printf("%.2f%%", utilization);
                         else
-                                printf("%.0f%%\n", utilization);
+                                printf("%.0f%%", utilization);
                 }else {
-                        printf("%f\n", utilization);
+                        printf("%f", utilization);
                 }
+                if(suffix)
+                        printf("%s", suffix); // Avoid '\n' of puts
+                fflush(stdout);
 
                 if(n>0) n--;
         }while(n);
@@ -142,14 +146,16 @@ void print_help(char *self) {
                "\t --fraction | -f   : When human, also print a fraction\n"
                "\t --interval | -i   : Update interval in seconds (default 1.0)\n"
                "\t --count    | -c   : # of output lines (default -1 = inf)\n"
-               "\t --prefix   | -p   : Prefix string to print before each line\n",
-                self);
+               "\t --prefix   | -p   : Prefix string to print before each value\n"
+               "\t --suffix   | -s   : Suffix string to print after each value (def. \\n)\n",
+               self);
 }
 
 int main(int argc, char **argv)
 {
         /* Defaults */
         char *prefix = NULL;
+        char *suffix = "\n";
         int flags = 0;
         int count = -1;
         struct timespec interval = {1,0};
@@ -159,13 +165,14 @@ int main(int argc, char **argv)
         char c;
         float f_interval;
         int longind = 0;
-        const char *optstring = "hfi:c:p:";
+        const char *optstring = "hfi:c:p:s:";
         const struct option longopts[] = {
                 {"human", no_argument, NULL, 'h'},
                 {"fraction", no_argument, NULL, 'f'},
                 {"interval", required_argument, NULL, 'i'},
                 {"count", required_argument, NULL, 'c'},
                 {"prefix", required_argument, NULL, 'p'},
+                {"suffix", required_argument, NULL, 's'},
                 {"help", no_argument, NULL, -127},
                 {NULL, no_argument, NULL, 0}
         };
@@ -190,6 +197,9 @@ int main(int argc, char **argv)
                 case 'p': /* Prefix */
                         prefix = optarg;
                         break;
+                case 's': /* Suffix */
+                        suffix = optarg;
+                        break;
                 case -127: /* Help */
                         print_help(argv[0]);
                         return 0;
@@ -210,8 +220,6 @@ int main(int argc, char **argv)
         strncat(statpath, disk, PATH_MAX-1);
         strncat(statpath, "/stat", PATH_MAX-1);
 
-
-
         int fd = open(statpath, O_RDONLY);
         if(fd == -1) {
                 switch(errno) {
@@ -229,5 +237,5 @@ int main(int argc, char **argv)
 
         }
 
-        return output_loop(fd, count, &interval, prefix, flags);
+        return output_loop(fd, count, &interval, prefix, suffix, flags);
 }
