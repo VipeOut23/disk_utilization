@@ -4,7 +4,7 @@ ALLCFLAGS = $(CFLAGS) $(shell echo | gcc -xc -E -v - 2>&1 | grep -E '^\s' | sed 
 OBJ = diskutil.o
 
 diskutil: $(OBJ)
-	$(CC) $(ALLCFLAGS) $(OBJ) -o disk_utilization
+	$(CC) $(ALLCFLAGS) $(OBJ) -o diskutil
 
 run: diskutil
 	./diskutil $(ARGS)
