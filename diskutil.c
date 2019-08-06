@@ -132,6 +132,7 @@ bool sane_disk_name(char *name, size_t len)
                    (*name >= '0' &&
                     *name <= '9')) {
                         name++;
+                        len--;
                         continue;
                 }
                 return false;
