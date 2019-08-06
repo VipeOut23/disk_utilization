@@ -213,7 +213,6 @@ int main(int argc, char **argv)
         }
 
         if(optind < argc) {
-
                 disk = argv[optind];
                 if(!sane_disk_name(disk, NAME_MAX)){
                         fputs("Unsafe diskname, aborting\n", stderr);
@@ -229,7 +228,7 @@ int main(int argc, char **argv)
         if(fd == -1) {
                 switch(errno) {
                 case ENOENT:
-                        fprintf(stderr, "Disk \"%s\" not found\n", disk);
+                        fprintf(stderr, "Disk \"%s\" not found in sysfs\n", disk);
                         break;
                 case EACCES:
                 case EPERM:
