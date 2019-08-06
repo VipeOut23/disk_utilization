@@ -130,7 +130,11 @@ bool sane_disk_name(char *name, size_t len)
                    (*name >= 'A' &&
                     *name <= 'Z')||
                    (*name >= '0' &&
-                    *name <= '9')) {
+                    *name <= '9') ||
+                   *name == '_' ||
+                   *name == '-' ||
+                   *name == '+' ||
+                   *name == '.') {
                         name++;
                         len--;
                         continue;
