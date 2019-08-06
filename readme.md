@@ -18,7 +18,7 @@ Simple Example:
 ```sh
 diskutil -h sda
 ```
-May output every second:
+May output (one line per second):
 ```
 2%
 0%
@@ -30,7 +30,7 @@ Advanced Example:
 ```sh
 diskutil -hf -i 3.1415 -c 5 --prefix="Usage: " sda
 ```
-May output every ~PI seconds:
+May output (one line every ~PI seconds):
 ```
 Usage: 0.00%
 Usage: 0.86%
