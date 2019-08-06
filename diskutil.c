@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <getopt.h>
 #include <limits.h>
+#include <locale.h>
 
 #define HUMAN_READABLE 0x01
 #define SHOW_FRACTION  0x02
@@ -159,13 +160,16 @@ void print_help(char *self) {
 int main(int argc, char **argv)
 {
         /* Defaults */
-        char *prefix = NULL;
-        char *suffix = "\n";
+        const char *prefix = NULL;
+        const char *suffix = "\n";
         int flags = 0;
         int count = -1;
         struct timespec interval = {1,0};
-        char *disk = "sda";
+        const char *disk = "sda";
         char statpath[PATH_MAX] = "/sys/block/";
+
+        /* Load default locale */
+        setlocale(LC_ALL, "");
 
         char c;
         float f_interval;
