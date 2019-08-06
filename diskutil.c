@@ -18,9 +18,9 @@
 #define IS_SHOW_FRACTION(f)  (((f) & SHOW_FRACTION)  == SHOW_FRACTION)
 
 /**
- * Returns total time spend in i/o (milliseconds)
+ * Returns total time spent in i/o (milliseconds)
  * @param stat opened stat file for block device
- * @return is -1 on error, otherwise total time spend in i/o (milliseconds)
+ * @return is -1 on error, otherwise total time spent in i/o (milliseconds)
  */
 uint64_t disk_time_io(const int fd)
 {
@@ -46,7 +46,7 @@ uint64_t disk_time_io(const int fd)
                      &io_ticks, &io_ticks, &io_ticks, &io_ticks, &io_ticks,
                      &io_ticks, &io_ticks, &io_ticks, &io_ticks, &io_ticks);
         if(ret < 10) {
-                fputs("Invalid data read from statfile\n", stderr);
+                fputs("Unexpected data read from statfile\n", stderr);
                 return -1;
         }
 
@@ -69,7 +69,7 @@ int output_loop(const int fd, int n, const struct timespec *interval,
         float utilization;
 
         do {
-                /* observer disk stats */
+                /* observe disk stats */
                 if( lseek(fd, 0, SEEK_SET) == -1 ) {
                         perror("lseek()");
                         return -1;
@@ -117,7 +117,7 @@ int output_loop(const int fd, int n, const struct timespec *interval,
 }
 
 /**
- * Check if a disk name is sane (alpha numeric)
+ * Check if a disk name is sane (alpha numeric and [_-+.])
  * @param name the name
  * @param len maximum length of name
  * @return true if sane, false otherwise
