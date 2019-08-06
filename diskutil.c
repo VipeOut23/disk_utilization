@@ -140,7 +140,7 @@ void print_help(char *self) {
         printf("%s [-h] [-f] [-i <float>] [-c <int>] [-p <string>] <disk>\n"
                "\t --human    | -h   : Output in percent\n"
                "\t --fraction | -f   : When human, also print a fraction\n"
-               "\t --interval | -i   : Update interval in ms (default 1000)\n"
+               "\t --interval | -i   : Update interval in seconds (default 1.0)\n"
                "\t --count    | -c   : # of output lines (default -1 = inf)\n"
                "\t --prefix   | -p   : Prefix string to print before each line\n",
                 self);
