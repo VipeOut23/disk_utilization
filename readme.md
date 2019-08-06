@@ -30,7 +30,7 @@ Advanced Example:
 ```sh
 diskutil -hf -i 3.1415 -c 5 --prefix="Usage: " sda
 ```
-May output:
+May output every ~PI seconds:
 ```
 Usage: 0.00%
 Usage: 0.86%
