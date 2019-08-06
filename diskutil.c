@@ -123,7 +123,7 @@ int output_loop(const int fd, int n, const struct timespec *interval,
  * @param len maximum length of name
  * @return true if sane, false otherwise
  */
-bool sane_disk_name(char *name, size_t len)
+bool sane_disk_name(const char *name, size_t len)
 {
         while(*name != '\0' && len) {
                 if((*name >= 'a' &&
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
 
         if(optind < argc) {
                 disk = argv[optind];
-                if(!sane_disk_name(disk, NAME_MAX)){
+                if( !sane_disk_name(disk, NAME_MAX) ){
                         fputs("Unsafe diskname, aborting\n", stderr);
                         return 1;
                 }
